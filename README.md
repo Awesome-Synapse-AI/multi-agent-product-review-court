@@ -1,4 +1,4 @@
-# Product Review Court (Agentic RAG)
+# Agentic AI-driven Product Review Court
 
 ![Overview flow](./img/overview-flow.png)
 
