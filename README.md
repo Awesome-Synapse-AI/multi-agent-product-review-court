@@ -4,7 +4,7 @@
 
 ## Overview
 
-- Purpose: Agentic workflow that searches for product reviews, extracts evidence, and runs a courtroom-style debate (Complaints vs. Fanboy) before the Judge issues a verdict.
+- Purpose: Agentic AI that searches for product reviews, extracts evidence, and runs a courtroom-style debate (Complaints vs. Fanboy) before the Judge issues a verdict.
 - Backend: [FastAPI](https://fastapi.tiangolo.com/) + [LangChain](https://python.langchain.com/) + [LangGraph](https://langchain-ai.github.io/langgraph/) + [Ollama](https://ollama.com/)
 - Frontend: [Chainlit](https://docs.chainlit.io/) chat UI
 
