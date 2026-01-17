@@ -1,0 +1,81 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-review-court-api
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - LANGCHAIN_TRACING_V2=true
+      - LANGCHAIN_PROJECT=product-review-court
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3:8b}
+      - OLLAMA_TEMPERATURE=${OLLAMA_TEMPERATURE:-0.35}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_CSE_ID=${GOOGLE_CSE_ID}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/reviews
+      - MEMORY_PATH=/data/global_memory.json
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - ollama
+    volumes:
+      - ./data:/data
+    command: ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  chainlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-review-court-chainlit
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - LANGCHAIN_TRACING_V2=true
+      - LANGCHAIN_PROJECT=product-review-court
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3:8b}
+      - OLLAMA_TEMPERATURE=${OLLAMA_TEMPERATURE:-0.35}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_CSE_ID=${GOOGLE_CSE_ID}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/reviews
+      - MEMORY_PATH=/data/global_memory.json
+      - CHAINLIT_DATA_LAYER=memory
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+      - ollama
+    volumes:
+      - ./data:/data
+    command: ["chainlit", "run", "app/chainlit_app.py", "--host", "0.0.0.0", "--port", "8001"]
+
+  postgres:
+    image: postgres:15
+    container_name: product-review-court-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=reviews
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: product-review-court-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - "C:/Users/admin/.ollama:/root/.ollama"
+
+volumes:
+  pgdata:
+  ollama_data:

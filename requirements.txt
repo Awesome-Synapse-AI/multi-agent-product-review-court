@@ -1,0 +1,9 @@
+fastapi>=0.110.0
+uvicorn>=0.23.0
+pydantic>=2.5.0
+pydantic-settings>=2.2.1
+psycopg2-binary>=2.9.9
+beautifulsoup4
+langchain-ollama>=0.1.2
+chainlit
+asyncpg
